@@ -2,9 +2,8 @@ package com.osiykm.flist.entities;
 
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,4 +20,12 @@ public class Author extends EntityAbstract {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Book> books;
 
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date created;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date added;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date updated;
 }
