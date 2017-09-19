@@ -28,6 +28,7 @@ public class Web implements Closeable {
     public void close() throws IOException {
         driver.quit();
     }
+
     public void init() {
         try {
             driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.chrome());
@@ -35,6 +36,7 @@ public class Web implements Closeable {
             log.error(e.getMessage());
         }
     }
+
     public void run() {
         driver.get("http://google.com");
     }

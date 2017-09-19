@@ -40,7 +40,7 @@ public class CategoryController {
 @Getter
 @AllArgsConstructor
 @JsonIgnoreProperties
-class CategoryRequest {
+class   CategoryRequest {
     @NotNull
     private String name;
 }

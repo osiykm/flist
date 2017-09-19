@@ -22,4 +22,4 @@ public class AuthorResourceProcessor implements ResourceProcessor<Resource<Autho
         resource.add(links.linkToSingleResource(resource.getContent()).withRel("delete"));
         return resource;
     }
-}
+    }

@@ -1,34 +1,47 @@
 package com.osiykm.flist.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-public class Author extends EntityAbstract {
 
+@Entity
+@Data
+@Table(name = "authors")
+@Builder
+public class Author implements Identifiable<Long> {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String url;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+
+    @OneToMany
+    @Column(nullable = false)
     private List<Book> books;
 
+    @Column(nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date created;
 
+    @Column(nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date added;
 
+    @Column(nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date updated;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

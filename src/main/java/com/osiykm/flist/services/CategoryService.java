@@ -20,6 +20,7 @@ public class CategoryService {
     public Category save(String name) {
         if(categoryRepository.existsByName(name))
             throw new RuntimeException("already_exist");
-        return categoryRepository.save(new Category(name, name.toLowerCase().replace(" ", "_")));
+
+        return categoryRepository.save(Category.builder().name(name).code(name.replace(" ", "_").toLowerCase()).build());
     }
 }

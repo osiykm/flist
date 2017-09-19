@@ -1,24 +1,25 @@
 package com.osiykm.flist.entities;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor()
-@Getter
-@Setter
-public class Category extends EntityAbstract {
-    @NonNull
-    @NotNull
+@Data
+@Builder
+public class Category implements Identifiable<Long> {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
     private String name;
 
-    @NonNull
-    @NotNull
+    @Column(nullable = false)
     private String code;
 
     @ManyToMany(cascade = CascadeType.ALL)
