@@ -28,21 +28,4 @@ public class Author implements Identifiable<Long> {
     @OneToMany
     @Column(nullable = false)
     private List<Book> books;
-
-    @Column(nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date created;
-
-    @Column(nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date added;
-
-    @Column(nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date updated;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
 }

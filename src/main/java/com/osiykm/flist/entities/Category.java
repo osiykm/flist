@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@Table(name = "categories")
 public class Category implements Identifiable<Long> {
 
     @Id
