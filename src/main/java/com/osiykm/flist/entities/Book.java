@@ -1,7 +1,8 @@
 package com.osiykm.flist.entities;
 
 import com.osiykm.flist.enums.BookStatus;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;

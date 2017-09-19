@@ -1,6 +1,7 @@
 package com.osiykm.flist.entities;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
