@@ -26,6 +26,7 @@ public class Author implements Identifiable<Long> {
 
 
     @OneToMany
-    @Column(nullable = false)
     private List<Book> books;
+
+
 }

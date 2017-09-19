@@ -24,7 +24,8 @@ public class Book implements Identifiable<Long> {
 
     @Enumerated
     @Column(nullable = false)
-    private BookStatus status;
+    @Builder.Default
+    private BookStatus status = BookStatus.UNPUBLISHED;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -38,11 +39,12 @@ public class Book implements Identifiable<Long> {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date created;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false )
     @Temporal(value = TemporalType.TIMESTAMP)
-    private Date added;
+    @Builder.Default
+    private Date added = new Date();
 
-    @Column(nullable = false)
+
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date updated;
 }
