@@ -1,8 +1,10 @@
 package com.osiykm.flist.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.osiykm.flist.enums.BookStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;

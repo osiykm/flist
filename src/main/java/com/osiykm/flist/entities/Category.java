@@ -1,20 +1,24 @@
 package com.osiykm.flist.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor()
 @Getter
 @Setter
 public class Category extends EntityAbstract {
+    @NonNull
+    @NotNull
     private String name;
+
+    @NonNull
+    @NotNull
     private String code;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -23,4 +27,6 @@ public class Category extends EntityAbstract {
             inverseJoinColumns = @JoinColumn(name = "categorY_id",
                     referencedColumnName = "id"))
     private List<Book> books;
+
+
 }
