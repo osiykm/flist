@@ -1,4 +1,4 @@
-package com.osiykm.flist.config.rest;
+package com.osiykm.flist.config;
 
 import com.osiykm.flist.entities.Book;
 import org.springframework.beans.factory.annotation.Autowired;

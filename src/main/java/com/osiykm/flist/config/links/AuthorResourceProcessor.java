@@ -1,4 +1,4 @@
-package com.osiykm.flist.config.rest;
+package com.osiykm.flist.config.links;
 
 import com.osiykm.flist.entities.Author;
 import org.springframework.beans.factory.annotation.Autowired;
