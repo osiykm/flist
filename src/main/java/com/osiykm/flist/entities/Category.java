@@ -26,7 +26,7 @@ public class Category implements Identifiable<Long> {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "book_category",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "categorY_id",
+            inverseJoinColumns = @JoinColumn(name = "category_id",
                     referencedColumnName = "id"))
     private List<Book> books;
 
