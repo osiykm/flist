@@ -9,6 +9,7 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @RestResource(exported=false)
 
     Category findByCode(String code);
+
     @RestResource(exported=false)
     Boolean existsByName(String name);
 }

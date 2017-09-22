@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Data
-@Builder
 @Table(name = "books")
 public class Book implements Identifiable<Long> {
     @Id
@@ -47,4 +46,14 @@ public class Book implements Identifiable<Long> {
 
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date updated;
+
+    @Builder
+    public Book(String name, BookStatus status, Author author, List<Category> categories, Date updated, Date created) {
+        this.name = name;
+        this.status = status;
+        this.author = author;
+        this.categories = categories;
+        this.updated = updated;
+        this.created = created;
+    }
 }
