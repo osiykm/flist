@@ -2,10 +2,12 @@ package com.osiykm.flist.services;
 
 import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.repositories.CategoryRepository;
+import org.hibernate.bytecode.buildtime.spi.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -25,6 +27,6 @@ public class CategoryService {
     }
 
     private String genCode(String name) {
-        return name.replaceAll("[^A-Za-z _-]+", "").replaceAll(" ", "_").toLowerCase();
+        return Optional.of(name).orElseThrow(NullPointerException::new).replaceAll("[^A-Za-z _-]+", "").replaceAll(" ", "_").toLowerCase();
     }
 }
