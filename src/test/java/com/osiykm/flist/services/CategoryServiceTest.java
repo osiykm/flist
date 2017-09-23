@@ -1,18 +1,14 @@
 package com.osiykm.flist.services;
 
-import com.osiykm.flist.entities.Book;
 import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.repositories.CategoryRepository;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.repository.CrudRepository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 /***
@@ -33,7 +29,8 @@ public class CategoryServiceTest {
     @Test
     public void save() throws Exception {
         when(mockRepository.save((Category) anyObject())).then(p -> p.getArguments()[0]);
-        System.out.println(service.save("Unbreakable Machine-Doll/機巧少女は傷つかない"));
+        assertEquals("unbreakable_machine-doll", service.save("Unbreakable Machine-Doll/機巧少女は傷つかない").getCode());
+
     }
 
 }
