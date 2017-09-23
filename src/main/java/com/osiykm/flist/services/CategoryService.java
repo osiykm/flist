@@ -18,9 +18,13 @@ public class CategoryService {
 
     @Transactional
     public Category save(String name) {
-        if(categoryRepository.existsByName(name))
+        if(categoryRepository.existByCode(genCode(name)))
             throw new RuntimeException("already_exist");
 
-        return categoryRepository.save(Category.builder().name(name).code(name.replace(" ", "_").toLowerCase()).build());
+        return categoryRepository.save(Category.builder().name(name).code(genCode(name)).build());
+    }
+
+    private String genCode(String name) {
+        return name.replaceAll("[^A-Za-z _-]+", "").replaceAll(" ", "_").toLowerCase();
     }
 }

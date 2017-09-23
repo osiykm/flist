@@ -11,5 +11,5 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     Category findByCode(String code);
 
     @RestResource(exported=false)
-    Boolean existsByName(String name);
+    Boolean existByCode(String name);
 }

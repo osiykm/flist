@@ -20,7 +20,7 @@ public class Category implements Identifiable<Long> {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @ManyToMany(cascade = CascadeType.ALL)
