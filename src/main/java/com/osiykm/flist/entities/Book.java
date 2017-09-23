@@ -3,6 +3,7 @@ package com.osiykm.flist.entities;
 import com.osiykm.flist.enums.BookStatus;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
@@ -14,12 +15,21 @@ import java.util.List;
 @Data
 @Table(name = "books")
 public class Book implements Identifiable<Long> {
+
+
+
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String commentary = "";
 
     @Enumerated
     @Column(nullable = false)
@@ -33,10 +43,6 @@ public class Book implements Identifiable<Long> {
     @ManyToMany(mappedBy = "books")
     private List<Category> categories;
 
-    @Column(nullable = false)
-    @GeneratedValue()
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date created;
 
     @Column(nullable = false, updatable = false )
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -47,9 +53,14 @@ public class Book implements Identifiable<Long> {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date updated;
 
+    @Column(nullable = false)
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date created;
+
     @Builder
-    public Book(String name, BookStatus status, Author author, List<Category> categories, Date updated, Date created) {
+    public  Book(String name, String description, BookStatus status, Author author, List<Category> categories, Date updated, Date created, String commentary) {
         this.name = name;
+        this.description = description;
         this.status = status;
         this.author = author;
         this.categories = categories;

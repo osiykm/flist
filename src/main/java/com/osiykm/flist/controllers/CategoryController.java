@@ -30,7 +30,6 @@ public class CategoryController {
 
     @RequestMapping(value= "/categories", method = RequestMethod.POST)
     @ResponseBody
-
     public PersistentEntityResource post(@RequestBody CategoryRequest request, PersistentEntityResourceAssembler as) {
         return as.toFullResource(categoryService.save(request.getName()));
     }

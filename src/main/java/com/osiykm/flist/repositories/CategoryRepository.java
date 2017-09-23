@@ -6,9 +6,10 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
-    @RestResource(exported = false)
+    @RestResource(exported=false)
+
     Category findByCode(String code);
 
-    @RestResource(exported = false)
-    Boolean existByCode(String name);
+    @RestResource(exported=false)
+    Boolean existsByCode(String name);
 }

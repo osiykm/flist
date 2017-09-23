@@ -1,23 +1,15 @@
 package com.osiykm.flist.services;
 
 import com.osiykm.flist.entities.Book;
-import lombok.Builder;
-import lombok.Data;
+import com.osiykm.flist.repositories.AuthorRepository;
+import com.osiykm.flist.repositories.BookRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.websocket.server.ServerEndpoint;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /***
  * @author osiykm
@@ -25,21 +17,27 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class BookStorageParserService {
-    private WebDriver driver;
+public class BookManageService {
+
+    private final WebDriverService driverService;
+    private final BookRepository bookRepository;
+    private final CategoryService categoryService;
+    private final AuthorRepository authorRepository;
 
 
-    public BookStorageParserService() {
-        try {
-            this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.phantomjs());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    @Autowired
+    public BookManageService(WebDriverService driverService, BookRepository bookRepository, CategoryService categoryService, AuthorRepository authorRepository) {
+        this.driverService = driverService;
+        this.bookRepository = bookRepository;
+        this.categoryService = categoryService;
+        this.authorRepository = authorRepository;
     }
 
     public Book parseBook(URL url) {
+        WebDriver driver = driverService.getDriver();
         driver.get(url.toExternalForm());
-//        response.put("name", driver.findElement(By.xpath("//*[@id=\"profile_top\"]/b")).getAttribute("innerText"));
+        WebElement descriptuion;
+//        Book.builder().name(driver.findElement(By.xpath("//*[@id=\"profile_top\"]/b")).getAttribute("innerText")).status(BookStatus.UNPUBLISHED).;
 //        response.put("author", driver.findElement(By.xpath("//*[@id=\"profile_top\"]/a[1]")).getAttribute("innerText"));
 //        response.put("authorUrl", driver.findElement(By.xpath("//*[@id=\"profile_top\"]/a[1]")).getAttribute("href"));
 //        response.put("description", driver.findElement(By.xpath("//*[@id=\"profile_top\"]/div")).getAttribute("innerText"));
@@ -49,13 +47,16 @@ public class BookStorageParserService {
 //        else {
 //            driver.get(elements.get(0).getAttribute("href"));
 //            elements = driver.findElements(By.xpath("//*[@id=\"content_wrapper_inner\"]/a"));
-//            log.info("Size: " + elements.size());
+//            response.put("Size", String.valueOf(elements.size()));
 //            elements = elements.stream().filter(a -> !a.getAttribute("title").toLowerCase().equals("feed")).collect(Collectors.toList());
 //            for (int i = 0; i < elements.size(); i++) {
 //                response.put("category" + (i + 1), elements.get(i).getAttribute("innerText"));
 //            }
+//
 //        }
-        log.info("parsed book:" );
+//        String resp = ).getAttribute("innerText");
+//        response.put("test", resp);
+//        log.info("parsed book:" + response);
         return null;
     }
 }

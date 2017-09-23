@@ -20,7 +20,7 @@ public class CategoryService {
 
     @Transactional
     public Category save(String name) {
-        if(categoryRepository.existByCode(genCode(name)))
+        if(categoryRepository.existsByCode(genCode(name)))
             return categoryRepository.findByCode(genCode(name));
 
         return categoryRepository.save(Category.builder().name(name).code(genCode(name)).build());
