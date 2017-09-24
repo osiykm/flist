@@ -7,6 +7,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
@@ -29,7 +33,12 @@ public class CategoryServiceTest {
     @Test
     public void save() throws Exception {
         when(mockRepository.save((Category) anyObject())).then(p -> p.getArguments()[0]);
-        assertEquals("unbreakable_machine-doll", service.save("Unbreakable Machine-Doll/機巧少女は傷つかない").getCode());
+        assertEquals("unbreakable_machine-doll", service.parseCategory("Unbreakable Machine-Doll/機巧少女は傷つかない").getCode());
+
+    }
+
+    @Test
+    public void testTemp() {
 
     }
 

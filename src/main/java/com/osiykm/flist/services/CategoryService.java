@@ -19,7 +19,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category save(String name) {
+    public Category parseCategory(String name) {
         if(categoryRepository.existsByCode(genCode(name)))
             return categoryRepository.findByCode(genCode(name));
 

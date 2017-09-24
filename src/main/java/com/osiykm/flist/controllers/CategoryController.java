@@ -1,12 +1,10 @@
 package com.osiykm.flist.controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.services.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
@@ -31,7 +29,7 @@ public class CategoryController {
     @RequestMapping(value= "/categories", method = RequestMethod.POST)
     @ResponseBody
     public PersistentEntityResource post(@RequestBody CategoryRequest request, PersistentEntityResourceAssembler as) {
-        return as.toFullResource(categoryService.save(request.getName()));
+        return as.toFullResource(categoryService.parseCategory(request.getName()));
     }
 
 }

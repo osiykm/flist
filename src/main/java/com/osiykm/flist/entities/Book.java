@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "books")
+@Builder
 public class Book implements Identifiable<Long> {
 
 
@@ -29,6 +30,7 @@ public class Book implements Identifiable<Long> {
     private String description;
 
     @Column(nullable = false)
+    @Builder.Default
     private String commentary = "";
 
     @Enumerated
@@ -57,14 +59,15 @@ public class Book implements Identifiable<Long> {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date created;
 
-    @Builder
-    public  Book(String name, String description, BookStatus status, Author author, List<Category> categories, Date updated, Date created, String commentary) {
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.author = author;
-        this.categories = categories;
-        this.updated = updated;
-        this.created = created;
-    }
+
+//    public  Book(String name, String description, BookStatus status, Author author, List<Category> categories, Date updated, Date created, String commentary) {
+//        this.name = name;
+//        this.description = description;
+//        this.status = status;
+//        this.author = author;
+//        this.categories = categories;
+//        this.updated = updated;
+//        this.created = created;
+//        this.commentary = commentary;
+//    }
 }
