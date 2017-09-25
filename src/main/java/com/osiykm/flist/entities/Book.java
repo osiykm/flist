@@ -1,22 +1,24 @@
 package com.osiykm.flist.entities;
 
 import com.osiykm.flist.enums.BookStatus;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Singular;
+import lombok.*;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
 @Data
 @Table(name = "books")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "categories")
 @Builder
 public class Book implements Identifiable<Long> {
-
 
 
     @Id
@@ -26,10 +28,10 @@ public class Book implements Identifiable<Long> {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1024)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1024)
     @Builder.Default
     private String commentary = "";
 
@@ -42,11 +44,15 @@ public class Book implements Identifiable<Long> {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    @ManyToMany(mappedBy = "books")
-    private List<Category> categories;
+    @ManyToMany(cascade = {CascadeType.DETACH})
+    @Builder.Default
+    private Set<Category> categories = new HashSet<>();
 
+    @Column(nullable = false, unique = true)
+    @NotNull
+    private String url;
 
-    @Column(nullable = false, updatable = false )
+    @Column(nullable = false, updatable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     @Builder.Default
     private Date added = new Date();
@@ -60,14 +66,5 @@ public class Book implements Identifiable<Long> {
     private Date created;
 
 
-//    public  Book(String name, String description, BookStatus status, Author author, List<Category> categories, Date updated, Date created, String commentary) {
-//        this.name = name;
-//        this.description = description;
-//        this.status = status;
-//        this.author = author;
-//        this.categories = categories;
-//        this.updated = updated;
-//        this.created = created;
-//        this.commentary = commentary;
-//    }
+
 }

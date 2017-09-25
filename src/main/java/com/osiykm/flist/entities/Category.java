@@ -1,16 +1,20 @@
 package com.osiykm.flist.entities;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
-@Builder
 @Table(name = "categories")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(exclude = "books")
 public class Category implements Identifiable<Long> {
 
     @Id
@@ -23,12 +27,9 @@ public class Category implements Identifiable<Long> {
     @Column(nullable = false, unique = true)
     private String code;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "book_category",
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id",
-                    referencedColumnName = "id"))
-    private List<Book> books;
+    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "categories")
+    @Builder.Default
+    private Set<Book> books = new HashSet<>();
 
 
 }

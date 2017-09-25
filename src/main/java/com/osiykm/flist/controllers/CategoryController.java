@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +31,11 @@ public class CategoryController {
         return as.toFullResource(categoryService.parseCategory(request.getName()));
     }
 
+    @RequestMapping(value = "/categories/{code}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable("code") String code) {
+        categoryService.deleteByCode(code);
+        return ResponseEntity.ok().build();
+    }
 }
 @NoArgsConstructor
 @Getter

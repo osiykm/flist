@@ -41,7 +41,7 @@ public class BookManageServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        categoryService = new CategoryService(mockRepository);
+        categoryService = new CategoryService(mockRepository, null);
         service = new BookManageService(new WebDriverService(), bookRepository, categoryService, authorRepository);
         when(mockRepository.save((Category) anyObject())).then(p -> p.getArguments()[0]);
         when(authorRepository.findByName(anyString())).then(p -> null);
@@ -50,7 +50,7 @@ public class BookManageServiceTest {
     }
     @Test
     public void parseBook() throws Exception {
-        Book book = service.parseBook(new URL("https://www.fanfiction.net/s/12582017/1/Daily-life"));
+        Book book = service.parseBook("https://www.fanfiction.net/s/12582017/1/Daily-life");
         System.out.println("BOOOK "+book);
 
     }
