@@ -39,7 +39,7 @@ public class BookManageService {
     }
 
     public Book parseBook(String url) {
-        if(bookRepository.existsByUrl(url))
+        if (bookRepository.existsByUrl(url))
             return bookRepository.findByUrl(url);
         WebDriver driver = driverService.getDriver();
         driver.get(url);
@@ -68,16 +68,21 @@ public class BookManageService {
             categories.add(categoryService.parseCategory(elements.get(1).getAttribute("innerText")));
         else {
             driver.get(elements.get(0).getAttribute("href"));
-            categories = driver.findElements(By.xpath("//*[@id=\"content_wrapper_inner\"]/a"))
-                    .stream()
-                    .filter(a -> !a.getAttribute("title").toLowerCase().equals("feed"))
-                    .map(p -> categoryService.parseCategory(p.getAttribute("innerText")))
-                    .collect(Collectors.toSet());
+            try {
+
+                categories = driver.findElements(By.xpath("//*[@id=\"content_wrapper_inner\"]/a"))
+                        .stream()
+                        .filter(a -> !a.getAttribute("title").toLowerCase().equals("feed"))
+                        .map(p -> categoryService.parseCategory(p.getAttribute("innerText")))
+                        .collect(Collectors.toSet());
+            } catch (Exception e) {
+                categories = new HashSet<>();
+            }
         }
         book.setAuthor(author);
         book.setCategories(categories);
-        Book finalBook = book;
-        categoryService.save(categories.stream().peek(p -> p.getBooks().add(finalBook)).collect(Collectors.toSet()));
+        if (categories.size() > 0)
+            categoryService.save(categories.stream().peek(p -> p.getBooks().add(book)).collect(Collectors.toSet()));
         return bookRepository.save(book);
     }
 }
