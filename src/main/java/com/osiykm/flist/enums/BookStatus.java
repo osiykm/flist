@@ -5,5 +5,5 @@ package com.osiykm.flist.enums;
  * created 19.09.2017 19:12
  */
 public enum BookStatus {
-    DEAD, LIVE, COMPLETED, UNPUBLISHED
+    PUBLISHED, COMPLETED, UNPUBLISHED
 }
