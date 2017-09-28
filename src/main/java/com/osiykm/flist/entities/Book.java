@@ -1,7 +1,9 @@
 package com.osiykm.flist.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.osiykm.flist.enums.BookStatus;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@Accessors(chain = true)
 @Entity
 @Data
 @Table(name = "books")
@@ -70,7 +73,5 @@ public class Book implements Identifiable<Long> {
 
     @Column(nullable = false)
     private Integer chapters;
-
-
 
 }

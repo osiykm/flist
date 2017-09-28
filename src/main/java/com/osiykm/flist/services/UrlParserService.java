@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class UrlParserService {
     private WebDriver driver;
     private String cacheUrl = "";
-
+    private long timer = Calendar.getInstance().getTimeInMillis();
     private final CategoryService categoryService;
 
     @Autowired
@@ -87,8 +87,16 @@ public class UrlParserService {
             }
         }
     }
+
     private void load(String url) {
-        if (!this.cacheUrl.equals(url))
+        if (!this.cacheUrl.equals(url)) {
+            if(Calendar.getInstance().getTimeInMillis() - timer < 500)
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    log.error("wrong wait period ", e);
+                }
             driver.get(url);
+        }
     }
 }
