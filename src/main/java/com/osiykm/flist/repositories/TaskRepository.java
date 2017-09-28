@@ -2,7 +2,6 @@ package com.osiykm.flist.repositories;
 
 import com.osiykm.flist.entities.Task;
 import com.osiykm.flist.enums.TaskStatus;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

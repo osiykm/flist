@@ -5,7 +5,6 @@ import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.enums.BookStatus;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;

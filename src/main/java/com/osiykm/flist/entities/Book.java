@@ -1,6 +1,5 @@
 package com.osiykm.flist.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.osiykm.flist.enums.BookStatus;
 import lombok.*;
 import lombok.experimental.Accessors;

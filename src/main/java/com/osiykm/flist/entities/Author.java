@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 
