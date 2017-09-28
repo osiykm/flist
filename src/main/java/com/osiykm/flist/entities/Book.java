@@ -65,6 +65,12 @@ public class Book implements Identifiable<Long> {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date created;
 
+    @Column(nullable = false)
+    private Integer size;
+
+    @Column(nullable = false)
+    private Integer chapters;
+
 
 
 }

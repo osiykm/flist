@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
@@ -15,12 +16,12 @@ import java.net.URL;
  * @author osiykm
  * created 23.09.2017 22:37
  */
-@Service
+@Component
 @Getter
-public class WebDriverService implements Closeable{
+public class WebDriverComponent implements Closeable{
     private WebDriver driver;
 
-    public WebDriverService() {
+    public WebDriverComponent() {
         try {
             this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.phantomjs());
         } catch (MalformedURLException e) {

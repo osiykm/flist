@@ -28,11 +28,11 @@ public class CategoryService {
         return categoryRepository.save(Category.builder().name(name).code(genCode(name)).build());
     }
 
-    private String genCode(String name) {
+    String genCode(String name) {
         return Optional.of(name).orElseThrow(NullPointerException::new).replaceAll("[^A-Za-z _+.-]+", "").replaceAll(" ", "_").toLowerCase();
     }
 
-    void save(Set<Category> categories) {
+    public void save(Set<Category> categories) {
         this.categoryRepository.save(categories);
     }
 
