@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
     String genCode(String name) {
-        return Optional.of(name).orElseThrow(NullPointerException::new)
+        return Optional.ofNullable(name).orElseThrow(NullPointerException::new)
                 .toLowerCase()
                 .replaceAll("[^a-z _+./-]+", "")
                 .replaceAll(" ", "_")
@@ -39,8 +39,13 @@ public class CategoryService {
 
     }
 
-    public void save(Set<Category> categories) {
-        this.categoryRepository.save(categories);
+    public Set<Category> save(Set<Category> categories) {
+        return categories.stream()
+                .map(p ->
+                        Optional.ofNullable(
+                                categoryRepository.findByCode(p.getCode()))
+                                .orElse(categoryRepository.save(p)))
+                .collect(Collectors.toSet());
     }
 
     @Transactional

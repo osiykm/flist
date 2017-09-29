@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /***
@@ -71,7 +72,10 @@ public class BookParserProgram extends BaseProgram {
     void save(Book book, Author author, Set<Category> categories) {
         log.info("START save book " + book.toString());
         authorRepository.save(author);
-        categoryService.save(categories);
-        bookRepository.save(book.setAuthor(author).setCategories(categories));
+        bookRepository.save(
+                book
+                        .setAuthor(Optional.ofNullable(authorRepository.findByName(author.getName())).orElse(authorRepository.save(author)))
+                        .setCategories(categoryService.save(categories))
+        );
     }
 }

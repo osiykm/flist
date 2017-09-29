@@ -53,11 +53,11 @@ public class ProgramsController {
         return programRunner(posterProgram, request.getStatus());
     }
     private ResponseEntity<Void> programRunner(BaseProgram program, ProgramEnum status) {
-        if(parserProgram.isAlive() && status.equals(ProgramEnum.STOP)) {
-            parserProgram.stop();
+        if(program.isAlive() && status.equals(ProgramEnum.STOP)) {
+            program.stop();
             return ResponseEntity.ok().build();
-        } else if(!parserProgram.isAlive() && status.equals(ProgramEnum.START)) {
-            parserProgram.start();
+        } else if(!program.isAlive() && status.equals(ProgramEnum.START)) {
+            program.start();
             return ResponseEntity.ok().build();
         }
         return  ResponseEntity.badRequest().build();

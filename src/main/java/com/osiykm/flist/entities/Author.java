@@ -23,7 +23,7 @@ public class Author implements Identifiable<Long> {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String url;
 
 

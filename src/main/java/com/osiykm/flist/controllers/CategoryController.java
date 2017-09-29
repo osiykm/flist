@@ -24,7 +24,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @RequestMapping(value= "/categories", method = RequestMethod.POST)
+    @RequestMapping(value = "/categories", method = RequestMethod.POST)
     @ResponseBody
     public PersistentEntityResource post(@RequestBody CategoryRequest request, PersistentEntityResourceAssembler as) {
         return as.toFullResource(categoryService.parseCategory(request.getName()));
@@ -36,11 +36,12 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
 }
+
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
 @JsonIgnoreProperties
-class   CategoryRequest {
+class CategoryRequest {
     @NotNull
     private String name;
 }

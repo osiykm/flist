@@ -26,7 +26,7 @@ public class Category implements Identifiable<Long> {
     @Column(nullable = false, unique = true)
     private String code;
 
-    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "categories")
+    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "categories", fetch = FetchType.EAGER)
     @Builder.Default
     private Set<Book> books = new HashSet<>();
 

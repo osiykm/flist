@@ -46,7 +46,7 @@ public class Book implements Identifiable<Long> {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    @ManyToMany(cascade = {CascadeType.DETACH})
+    @ManyToMany(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Builder.Default
     private Set<Category> categories = new HashSet<>();
 

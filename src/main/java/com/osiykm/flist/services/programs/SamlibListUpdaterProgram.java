@@ -2,6 +2,7 @@ package com.osiykm.flist.services.programs;
 
 import com.osiykm.flist.services.ListCreatorService;
 import com.osiykm.flist.services.SamlibUpdaterService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +14,11 @@ import java.util.Calendar;
  * created 29.09.2017 22:27
  */
 @Component
+@Slf4j
 public class SamlibListUpdaterProgram extends BaseProgram{
     private final ListCreatorService listCreatorService;
     private final SamlibUpdaterService samlibUpdaterService;
-    private final String annotation = "Fanfics list ";
+
     @Autowired
     public SamlibListUpdaterProgram(ListCreatorService listCreatorService, SamlibUpdaterService samlibUpdaterService) {
         this.listCreatorService = listCreatorService;
@@ -25,10 +27,13 @@ public class SamlibListUpdaterProgram extends BaseProgram{
 
     @Override
     public void run() {
+        log.info("start poster");
+        String annotation = "Fanfics list ";
         samlibUpdaterService.listUpdate(
-                annotation + new SimpleDateFormat("dd/mm/yyyy").format(Calendar.getInstance().getTime()),
+                annotation + new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()),
                 listCreatorService.createList()
         );
         stop();
+        log.info("stop poster");
     }
 }

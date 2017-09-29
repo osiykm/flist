@@ -24,6 +24,7 @@ public class Task {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String url;
 
 

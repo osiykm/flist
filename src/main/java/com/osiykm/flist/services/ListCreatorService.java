@@ -1,5 +1,6 @@
 package com.osiykm.flist.services;
 
+import com.google.common.collect.Lists;
 import com.osiykm.flist.entities.Book;
 import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.enums.BookStatus;
@@ -9,10 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,16 +37,17 @@ public class ListCreatorService {
     public String createList() {
         StringJoiner headerList = new StringJoiner("\n", "<ul>", "</ul>");
         StringJoiner bodyList = new StringJoiner("\n");
-        StreamSupport.stream(categoryRepository.findAll().spliterator(), false).filter(p -> p.getBooks().size() != 0).sorted(Comparator.comparing(Category::getName)).forEach(p -> {
-            headerList.add("<li><a href=\"#" + p.getCode() + "\">" + p.getName() + "</a></li>");
-            bodyList.add("<h3 id=\"" + p.getCode() + "\">" + p.getName() + "</h3>\n").add("")
-                    .add("<p><a href=\"" + p.getCode() + "_crossovers\">Crossovers</a></p>\n")
-                    .add(p.getBooks().stream()
+        List<Category> categories = Lists.newArrayList(categoryRepository.findAll());
+        categories.stream().filter(p -> p.getBooks().size() != 0).sorted(Comparator.comparing(Category::getName)).forEach(category -> {
+            headerList.add("<li><a href=\"#" + category.getCode() + "\">" + category.getName() + "</a></li>");
+            bodyList.add("<h3 id=\"" + category.getCode() + "\">" + category.getName() + "</h3>\n").add("")
+                    .add("<p><a href=\"" + category.getCode() + "_crossovers\">Crossovers</a></p>\n")
+                    .add(category.getBooks().stream()
                             .filter(book -> book.getCategories().size() == 1)
                             .map(this::createDescription)
                             .collect(Collectors.joining("\n")))
-                    .add("<h4 id=\"" + p.getCode() + "_crossovers\">" + p.getName() + " Crossovers</h4>")
-                    .add(p.getBooks().stream()
+                    .add("<h4 id=\"" + category.getCode() + "_crossovers\">" + category.getName() + " Crossovers</h4>")
+                    .add(category.getBooks().stream()
                             .filter(book -> book.getCategories().size() != 1)
                             .map(this::createDescription)
                             .collect(Collectors.joining("\n")));
@@ -58,13 +59,14 @@ public class ListCreatorService {
         StringJoiner joiner = new StringJoiner("\n<br>\n", "<p>", "</p>");
         joiner
                 .add("<b>Name:</b> <a href=\"" + book.getUrl() + "\">" + book.getName() + "</a>")
-                .add("<b>Name:</b> " + getStatus(book))
-                .add("<b>Size:</b> " + book.getSize() + " words(" + book.getChapters() + " chapters)")
-                .add("<b>Last updated:</b> " + new SimpleDateFormat("dd/mm/yyyy").format(book.getUpdated()))
-                .add("<b>Fandoms: </b>" + book.getCategories().stream().map(Category::getName).collect(Collectors.joining(",")))
+                .add("<b>Author:</b> <a href=\""+book.getAuthor().getUrl()+"\">"+book.getAuthor().getName()+"</a>" )
+                .add("<b>Status:</b> " + getStatus(book))
+                .add("<b>Size:</b> " + new DecimalFormat("#,##0").format(book.getSize()) + " words (" + book.getChapters() + " chapters)")
+                .add("<b>Last updated:</b> " + new SimpleDateFormat("dd/MM/yyyy").format(book.getUpdated()))
+                .add("<b>Fandoms: </b>" + book.getCategories().stream().map(Category::getName).collect(Collectors.joining(", ")))
                 .add("<b>Description:</b> " + book.getDescription())
                 .add("<b>Comentary:</b> " + book.getCommentary());
-        return null;
+        return joiner.toString();
     }
 
     private String getStatus(Book book) {
