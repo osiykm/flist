@@ -43,10 +43,11 @@ public class BookParserProgram extends BaseProgram {
 
     @Override
     public void run() {
+        log.info("Start Parser");
         List<Task> tasks = taskRepository.findByStatus(TaskStatus.WAITING);
         for (Task task :
                 tasks) {
-            if(isAlive()) {
+            if (isAlive()) {
                 try {
                     save(
                             urlParserService.getBook(task.getUrl()),
@@ -55,17 +56,20 @@ public class BookParserProgram extends BaseProgram {
                     );
                     taskRepository.save(task.setStatus(TaskStatus.COMPLETED));
                 } catch (Exception e) {
-                    log.info("task " + task.toString() + " error");
+                    log.info("task " + task.toString() + " error ", e);
                     taskRepository.save(task.setStatus(TaskStatus.ERROR));
                 }
             } else {
                 break;
             }
         }
+        log.info("Stop parser");
+        stop();
     }
 
     @Transactional
     void save(Book book, Author author, Set<Category> categories) {
+        log.info("START save book " + book.toString());
         authorRepository.save(author);
         categoryService.save(categories);
         bookRepository.save(book.setAuthor(author).setCategories(categories));

@@ -72,5 +72,4 @@ public class Book implements Identifiable<Long> {
 
     @Column(nullable = false)
     private Integer chapters;
-
 }

@@ -30,7 +30,13 @@ public class CategoryService {
     }
 
     String genCode(String name) {
-        return Optional.of(name).orElseThrow(NullPointerException::new).replaceAll("[^A-Za-z _+.-]+", "").replaceAll(" ", "_").toLowerCase();
+        return Optional.of(name).orElseThrow(NullPointerException::new)
+                .toLowerCase()
+                .replaceAll("[^a-z _+./-]+", "")
+                .replaceAll(" ", "_")
+                .replaceAll("/", "-")
+                .replaceAll("[_-]+$|^[_-]+", "");
+
     }
 
     public void save(Set<Category> categories) {

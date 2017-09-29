@@ -1,15 +1,10 @@
 package com.osiykm.flist.entities;
 
 import com.osiykm.flist.enums.TaskStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -19,10 +14,9 @@ import java.util.Date;
  */
 @Accessors(chain = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
+@Table(name = "tasks")
 public class Task {
 
     @Id
@@ -32,9 +26,13 @@ public class Task {
     @NotNull
     private String url;
 
-    @Builder.Default
+
     private Date created = new Date();
 
-    @Builder.Default
+    @Enumerated(EnumType.STRING)
     private TaskStatus status = TaskStatus.WAITING;
+
+    public Task(String url) {
+        this.url = url;
+    }
 }

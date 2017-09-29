@@ -35,5 +35,6 @@ dependencies {
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
    // testCompile('org.springframework.security:spring-security-test')
+    compile 'org.springframework.data:spring-data-rest-hal-browser'
 }
 compileJava.dependsOn(processResources)

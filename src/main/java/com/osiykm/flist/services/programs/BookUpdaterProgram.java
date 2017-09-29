@@ -49,5 +49,6 @@ public class BookUpdaterProgram extends BaseProgram {
             log.info("updated " + updatedBooks.size() + " books");
             bookRepository.save(updatedBooks);
         }
+        stop();
     }
 }

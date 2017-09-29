@@ -51,7 +51,7 @@ public class UrlParserService {
                 )
                 .chapters(
                         Arrays.stream(descriptions)
-                                .filter(p -> p.startsWith("Words: "))
+                                .filter(p -> p.startsWith("Chapters: "))
                                 .map(p -> Integer.parseInt(p.replace("Chapters: ", "")))
                                 .findFirst().orElse(1)
                 )

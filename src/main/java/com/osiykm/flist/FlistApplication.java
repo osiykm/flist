@@ -1,6 +1,5 @@
 package com.osiykm.flist;
 
-import com.osiykm.flist.services.programs.BookParserProgram;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
