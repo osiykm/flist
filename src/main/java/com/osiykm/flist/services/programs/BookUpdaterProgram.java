@@ -17,14 +17,10 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class BookUpdaterProgram implements Runnable {
+public class BookUpdaterProgram extends BaseProgram {
     private final UrlParserService urlParserService;
     private final BookRepository bookRepository;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final long TIME_SLEEP = 1000 * 60 * 60 * 24;
-
-    private boolean alive = false;
 
     @Autowired
     public BookUpdaterProgram(UrlParserService urlParserService, BookRepository bookRepository) {
@@ -45,30 +41,13 @@ public class BookUpdaterProgram implements Runnable {
                     books) {
                 if (isAlive()) {
                     Book updatedBook = urlParserService.getBook(book.getUrl());
-                     updatedBooks.add(book.setSize(updatedBook.getSize()).setChapters(updatedBook.getChapters()).setStatus(updatedBook.getStatus()));
+                    updatedBooks.add(book.setSize(updatedBook.getSize()).setChapters(updatedBook.getChapters()).setStatus(updatedBook.getStatus()));
                 } else {
                     break;
                 }
             }
+            log.info("updated " + updatedBooks.size() + " books");
             bookRepository.save(updatedBooks);
-            try {
-                Thread.sleep(TIME_SLEEP);
-            } catch (InterruptedException ignored) {
-            }
         }
-    }
-
-    public void start() {
-        alive = true;
-        new Thread(this).start();
-    }
-
-    public void stop() {
-        alive = false;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public boolean isAlive() {
-        return alive;
     }
 }
