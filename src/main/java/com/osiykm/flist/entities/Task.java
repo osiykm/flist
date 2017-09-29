@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import java.util.Date;
  * @author osiykm
  * created 27.09.2017 20:59
  */
+@Accessors(chain = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface TaskRepository extends Repository<Task, Long> {
     List<Task> findAll();
-    List<Task> save(Iterable<Task> tasks);
+    void save(Task task);
+    List<Task> save(List<Task> tasks);
     List<Task> findByStatus(TaskStatus status);
 }

@@ -65,7 +65,7 @@ public class UrlParserService {
                 .build();
     }
 
-    public Set<Category> getGategories(String url) {
+    public Set<Category> getCategories(String url) {
         load(url);
         List<WebElement> elements = driver.findElements(By.xpath("//*[@id=\"pre_story_links\"]/span/a"));
         if (elements.size() == 2) {
