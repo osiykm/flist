@@ -32,7 +32,7 @@ public class WebDriverComponent implements Closeable{
     WebDriver getDriver() {
         if (driver == null) {
             try {
-                this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.chrome());
+                this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.phantomjs());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

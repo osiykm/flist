@@ -52,7 +52,7 @@ public class SamlibUpdaterService {
         }
     }
 
-    void listUpdate(String annotation, String text) {
+    public void listUpdate(String annotation, String text) {
         login();
         annotationUpdate(annotation);
         textUpdate(text);
