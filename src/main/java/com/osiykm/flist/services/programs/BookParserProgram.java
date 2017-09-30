@@ -66,6 +66,7 @@ public class BookParserProgram extends BaseProgram {
         }
         log.info("Stop parser");
         stop();
+        urlParserService.unlock();
     }
 
     @Transactional

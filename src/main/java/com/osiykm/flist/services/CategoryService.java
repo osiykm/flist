@@ -33,8 +33,8 @@ public class CategoryService {
         return Optional.ofNullable(name).orElseThrow(NullPointerException::new)
                 .toLowerCase()
                 .replaceAll("[^a-z _+./-]+", "")
-                .replaceAll(" ", "_")
-                .replaceAll("/", "-")
+                .replace(" ", "_")
+                .replace("/", "-")
                 .replaceAll("[_-]+$|^[_-]+", "");
 
     }

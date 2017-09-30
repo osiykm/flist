@@ -38,19 +38,9 @@ public class ListCreatorService {
         StringJoiner headerList = new StringJoiner("\n", "<ul>", "</ul>");
         StringJoiner bodyList = new StringJoiner("\n");
         List<Category> categories = Lists.newArrayList(categoryRepository.findAll());
-        categories.stream().filter(p -> p.getBooks().size() != 0).sorted(Comparator.comparing(Category::getName)).forEach(category -> {
+        categories.stream().filter(p -> p.getBooks().stream().anyMatch(book -> !book.getStatus().equals(BookStatus.UNPUBLISHED))).sorted(Comparator.comparing(Category::getName)).forEach(category -> {
             headerList.add("<li><a href=\"#" + category.getCode() + "\">" + category.getName() + "</a></li>");
-            bodyList.add("<h3 id=\"" + category.getCode() + "\">" + category.getName() + "</h3>\n").add("")
-                    .add("<p><a href=\"" + category.getCode() + "_crossovers\">Crossovers</a></p>\n")
-                    .add(category.getBooks().stream()
-                            .filter(book -> book.getCategories().size() == 1)
-                            .map(this::createDescription)
-                            .collect(Collectors.joining("\n")))
-                    .add("<h4 id=\"" + category.getCode() + "_crossovers\">" + category.getName() + " Crossovers</h4>")
-                    .add(category.getBooks().stream()
-                            .filter(book -> book.getCategories().size() != 1)
-                            .map(this::createDescription)
-                            .collect(Collectors.joining("\n")));
+            bodyList.add(getCategory(category));
         });
         return headerList + "\n" + bodyList;
     }
@@ -59,7 +49,7 @@ public class ListCreatorService {
         StringJoiner joiner = new StringJoiner("\n<br>\n", "<p>", "</p>");
         joiner
                 .add("<b>Name:</b> <a href=\"" + book.getUrl() + "\">" + book.getName() + "</a>")
-                .add("<b>Author:</b> <a href=\""+book.getAuthor().getUrl()+"\">"+book.getAuthor().getName()+"</a>" )
+                .add("<b>Author:</b> <a href=\"" + book.getAuthor().getUrl() + "\">" + book.getAuthor().getName() + "</a>")
                 .add("<b>Status:</b> " + getStatus(book))
                 .add("<b>Size:</b> " + new DecimalFormat("#,##0").format(book.getSize()) + " words (" + book.getChapters() + " chapters)")
                 .add("<b>Last updated:</b> " + new SimpleDateFormat("dd/MM/yyyy").format(book.getUpdated()))
@@ -76,5 +66,23 @@ public class ListCreatorService {
             return "<font color=\"red\">DEAD</font>";
         }
         return "<font color=\"blue\">LIVE</font>";
+    }
+
+    private String getCategory(Category category) {
+        StringJoiner joiner = new StringJoiner("\n");
+        joiner.add("<h3 id=\"" + category.getCode() + "\">" + category.getName() + "</h3>\n").add("");
+        if (category.getBooks().stream().anyMatch(book -> book.getCategories().size() != 1) && category.getBooks().stream().anyMatch(book -> book.getCategories().size() == 1))
+            joiner.add("<p><a href=\"" + category.getCode() + "_crossovers\">Crossovers</a></p>\n");
+        joiner.add(category.getBooks().stream()
+                .filter(book -> book.getCategories().size() == 1)
+                .map(this::createDescription)
+                .collect(Collectors.joining("\n")));
+        if (category.getBooks().stream().anyMatch(book -> book.getCategories().size() != 1))
+            joiner.add("<h4 id=\"" + category.getCode() + "_crossovers\">" + category.getName() + " Crossovers</h4>")
+                    .add(category.getBooks().stream()
+                            .filter(book -> book.getCategories().size() != 1)
+                            .map(this::createDescription)
+                            .collect(Collectors.joining("\n")));
+        return joiner.toString();
     }
 }

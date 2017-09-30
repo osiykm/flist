@@ -25,11 +25,12 @@ public class UrlParserService {
     private String cacheUrl = "";
     private long timer = Calendar.getInstance().getTimeInMillis();
     private final CategoryService categoryService;
+    private final WebDriverComponent webDriverComponent;
 
     @Autowired
-    public UrlParserService(WebDriverComponent driverService, CategoryService categoryService) {
-        this.driver = driverService.getDriver();
+    public UrlParserService(WebDriverComponent webDriverComponent, CategoryService categoryService) {
         this.categoryService = categoryService;
+        this.webDriverComponent = webDriverComponent;
     }
 
     public Book getBook(String url) {
@@ -59,6 +60,7 @@ public class UrlParserService {
     }
 
     public Author getAuthor(String url) {
+        load(url);
         return Author.builder()
                 .name(driver.findElement(By.xpath("//*[@id=\"profile_top\"]/a[1]")).getAttribute("innerText"))
                 .url(driver.findElement(By.xpath("//*[@id=\"profile_top\"]/a[1]")).getAttribute("href"))
@@ -88,6 +90,8 @@ public class UrlParserService {
     }
 
     private void load(String url) {
+        if (driver == null)
+            driver = webDriverComponent.getDriver();
         if (!this.cacheUrl.equals(url)) {
             if(Calendar.getInstance().getTimeInMillis() - timer < 500)
                 try {
@@ -97,5 +101,10 @@ public class UrlParserService {
                 }
             driver.get(url);
         }
+    }
+
+    public void unlock() {
+        webDriverComponent.unlock();
+        driver = null;
     }
 }

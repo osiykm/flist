@@ -1,6 +1,5 @@
 package com.osiykm.flist.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -21,11 +20,12 @@ import java.util.Properties;
 @Slf4j
 public class SamlibUpdaterService {
 
-    private final WebDriver driver;
+    private final WebDriverComponent webDriverComponent;
     private Properties properties = new Properties();
+    private WebDriver driver;
 
     {
-        try(InputStream stream = new FileInputStream(new File("samlib.properties"))) {
+        try (InputStream stream = new FileInputStream(new File("samlib.properties"))) {
             properties.load(stream);
         } catch (IOException e1) {
             log.error(e1.getMessage());
@@ -34,7 +34,7 @@ public class SamlibUpdaterService {
 
     @Autowired
     public SamlibUpdaterService(WebDriverComponent webDriverComponent) {
-        this.driver = webDriverComponent.getDriver();
+        this.webDriverComponent = webDriverComponent;
     }
 
     private void login() {
@@ -53,28 +53,34 @@ public class SamlibUpdaterService {
     }
 
     public void listUpdate(String annotation, String text) {
+        driver = webDriverComponent.getDriver();
         login();
         annotationUpdate(annotation);
         textUpdate(text);
+        webDriverComponent.unlock();
+
     }
 
     private void annotationUpdate(String annotation) {
-        driver.get("http://samlib.ru/cgi-bin/zhurnal?OPERATION=edit_book&FILE="+properties.getProperty("fanfics-list")+"&DIR="+properties.getProperty("samlib-dir"));
+        driver.get("http://samlib.ru/cgi-bin/zhurnal?OPERATION=edit_book&FILE=" + properties.getProperty("fanfics-list") + "&DIR=" + properties.getProperty("samlib-dir"));
         driver.findElement(By.xpath("/html/body/li[3]/div[1]/table/tbody/tr/td/center/table/tbody/tr[9]/td[3]/textarea")).clear();
         driver.findElement(By.xpath("/html/body/li[3]/div[1]/table/tbody/tr/td/center/table/tbody/tr[9]/td[3]/textarea")).sendKeys(annotation);
         driver.findElement(By.xpath("/html/body/li[3]/div[1]/table/tbody/tr/td/center/table/tbody/tr[10]/td[2]/center/input[1]")).click();
         sleep();
     }
+
     private void textUpdate(String text) {
-        driver.get("http://samlib.ru/cgi-bin/zhurnal?OPERATION=(Text+edit)&DIR="+properties.getProperty("samlib-dir")+"&STORE_FILE="+properties.getProperty("fanfics-list"));
+        driver.get("http://samlib.ru/cgi-bin/zhurnal?OPERATION=(Text+edit)&DIR=" + properties.getProperty("samlib-dir") + "&STORE_FILE=" + properties.getProperty("fanfics-list"));
         driver.findElement(By.xpath("/html/body/div[2]/table/tbody/tr/td[1]/form/table/tbody/tr[1]/td/small/textarea")).clear();
         driver.findElement(By.xpath("/html/body/div[2]/table/tbody/tr/td[1]/form/table/tbody/tr[1]/td/small/textarea")).sendKeys(text);
         driver.findElement(By.xpath("/html/body/div[2]/table/tbody/tr/td[1]/form/table/tbody/tr[2]/td/input")).click();
         sleep();
     }
+
     private void sleep() {
         try {
             Thread.sleep(500);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
     }
 }
