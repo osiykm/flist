@@ -28,7 +28,7 @@ public class SamlibListUpdaterProgram extends BaseProgram{
     @Override
     public void run() {
         log.info("start poster");
-        String annotation = "Fanfics list ";
+        String annotation = "Список фанфиков из сайта fanfiction.net, которые я читаю. Последнее обновление ";
         samlibUpdaterService.listUpdate(
                 annotation + new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()),
                 listCreatorService.createList()

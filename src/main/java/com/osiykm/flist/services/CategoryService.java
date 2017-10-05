@@ -3,6 +3,7 @@ package com.osiykm.flist.services;
 import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.repositories.BookRepository;
 import com.osiykm.flist.repositories.CategoryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final BookRepository bookRepository;
@@ -40,14 +42,15 @@ public class CategoryService {
     }
 
     public Set<Category> save(Set<Category> categories) {
+        log.info("categorise = " + categories);
         return categories.stream()
-                .map(p ->
-                        Optional.ofNullable(
-                                categoryRepository.findByCode(p.getCode()))
-                                .orElse(categoryRepository.save(p)))
+                .map(p -> Optional.ofNullable(
+                        categoryRepository.findByCode(p.getCode())).orElseGet(() -> saveOne(p)))
                 .collect(Collectors.toSet());
     }
-
+    private Category saveOne(Category category) {
+        return categoryRepository.save(category);
+    }
     @Transactional
     public void deleteByCode(String code) {
         Category category = categoryRepository.findByCode(code);

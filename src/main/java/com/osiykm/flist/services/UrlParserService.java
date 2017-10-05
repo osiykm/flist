@@ -35,7 +35,13 @@ public class UrlParserService {
 
     public Book getBook(String url) {
         load(url);
-        WebElement description = driver.findElement(By.xpath("//*[@id=\"profile_top\"]/span[4]"));
+        WebElement description;
+        try {
+            description = driver.findElement(By.xpath("//*[@id=\"profile_top\"]/span[4]"));
+        } catch (Exception e) {
+            description = driver.findElement(By.xpath("//*[@id=\"profile_top\"]/span[3]"));
+        }
+
         String[] descriptions = description.getAttribute("innerText").split(" - ");
         return Book.builder()
                 .name(driver.findElement(By.xpath("//*[@id=\"profile_top\"]/b")).getAttribute("innerText"))

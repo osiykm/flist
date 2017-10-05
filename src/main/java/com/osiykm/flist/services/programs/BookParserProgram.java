@@ -50,12 +50,14 @@ public class BookParserProgram extends BaseProgram {
                 tasks) {
             if (isAlive()) {
                 try {
+                    log.info(task.getUrl() + " start");
                     save(
                             urlParserService.getBook(task.getUrl()),
                             urlParserService.getAuthor(task.getUrl()),
                             urlParserService.getCategories(task.getUrl())
                     );
                     taskRepository.save(task.setStatus(TaskStatus.COMPLETED));
+                    log.info(task.getUrl() + " save");
                 } catch (Exception e) {
                     log.info("task " + task.toString() + " error ", e);
                     taskRepository.save(task.setStatus(TaskStatus.ERROR));
@@ -72,10 +74,13 @@ public class BookParserProgram extends BaseProgram {
     @Transactional
     void save(Book book, Author author, Set<Category> categories) {
         log.info("START save book " + book.toString());
-        authorRepository.save(author);
+        log.info("author " + author);
+        log.info("categories " + categories);
         bookRepository.save(
                 book
-                        .setAuthor(Optional.ofNullable(authorRepository.findByName(author.getName())).orElse(authorRepository.save(author)))
+                        .setAuthor(
+                                Optional.ofNullable(authorRepository.findByName(author.getName()))
+                                        .orElse(authorRepository.save(author)))
                         .setCategories(categoryService.save(categories))
         );
     }

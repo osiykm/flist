@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "books")
+@ToString(exclude = "books")
 public class Category implements Identifiable<Long> {
 
     @Id

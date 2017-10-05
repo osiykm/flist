@@ -1,9 +1,6 @@
 package com.osiykm.flist.entities;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.List;
 @Data
 @Table(name = "authors")
 @EqualsAndHashCode(exclude = "books")
+@ToString(exclude = "books")
 @NoArgsConstructor
 public class Author implements Identifiable<Long> {
     @Id
@@ -27,7 +25,7 @@ public class Author implements Identifiable<Long> {
     private String url;
 
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private List<Book> books;
 
     @Builder

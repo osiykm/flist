@@ -19,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "categories")
+@ToString(exclude = "categories")
 @Builder
 public class Book implements Identifiable<Long> {
 
