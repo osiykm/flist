@@ -55,7 +55,7 @@ public class CategoryService {
     public void deleteByCode(String code) {
         Category category = categoryRepository.findByCode(code);
         bookRepository.save(
-                bookRepository.findByCategoriesContaining(category).stream().peek(p -> p.getCategories().remove(category)).collect(Collectors.toSet())
+                category.getBooks().stream().peek(p -> p.getCategories().remove(category)).collect(Collectors.toSet())
         );
         categoryRepository.delete(category);
     }
