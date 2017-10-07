@@ -1,8 +1,5 @@
 package com.osiykm.flist.entities;
 
-import com.osiykm.flist.entities.Author;
-import com.osiykm.flist.entities.Book;
-import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.enums.BookStatus;
 import org.springframework.data.rest.core.config.Projection;
 

@@ -2,7 +2,6 @@ package com.osiykm.flist.controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.osiykm.flist.entities.Task;
-import com.osiykm.flist.repositories.TaskRepository;
 import com.osiykm.flist.services.TaskService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

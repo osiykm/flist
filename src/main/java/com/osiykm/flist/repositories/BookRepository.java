@@ -1,17 +1,14 @@
 package com.osiykm.flist.repositories;
 
 import com.osiykm.flist.entities.Book;
-import com.osiykm.flist.entities.Category;
-import com.osiykm.flist.enums.BookStatus;
 import com.osiykm.flist.entities.BookProj;
-import com.osiykm.flist.services.ListCreatorService;
+import com.osiykm.flist.enums.BookStatus;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
-import java.util.Set;
 
 @RepositoryRestResource(excerptProjection = BookProj.class)
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
