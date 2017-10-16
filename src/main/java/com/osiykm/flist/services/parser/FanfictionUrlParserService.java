@@ -22,17 +22,13 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class FanfictionUrlParserService implements UrlParser {
-    private WebDriver driver;
-    private String cacheUrl = "";
-    private long timer = Calendar.getInstance().getTimeInMillis();
+public class FanfictionUrlParserService extends UrlParser {
     private final CategoryService categoryService;
-    private final WebDriverComponent webDriverComponent;
 
     @Autowired
     public FanfictionUrlParserService(WebDriverComponent webDriverComponent, CategoryService categoryService) {
+        super(webDriverComponent);
         this.categoryService = categoryService;
-        this.webDriverComponent = webDriverComponent;
     }
 
     @Override
@@ -98,25 +94,5 @@ public class FanfictionUrlParserService implements UrlParser {
                 return new HashSet<>();
             }
         }
-    }
-
-    private void load(String url) {
-        if (driver == null)
-            driver = webDriverComponent.getDriver();
-        if (!this.cacheUrl.equals(url)) {
-            if (Calendar.getInstance().getTimeInMillis() - timer < 500)
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    log.error("wrong wait period ", e);
-                }
-            driver.get(url);
-        }
-    }
-
-    @Override
-    public void unlock() {
-        webDriverComponent.unlock();
-        driver = null;
     }
 }

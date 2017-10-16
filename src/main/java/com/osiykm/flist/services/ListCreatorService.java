@@ -49,10 +49,10 @@ public class ListCreatorService {
         joiner
                 .add("<b>Название:</b> <a href=\"" + book.getUrl() + "\">" + book.getName() + "</a>")
                 .add("<b>Автор:</b> <a href=\"" + book.getAuthor().getUrl() + "\">" + book.getAuthor().getName() + "</a>")
+                .add("<b>Фендомы: </b>" + book.getCategories().stream().map(p -> "<a href=\"#"+p.getCode()+"\">"+p.getName()+"</a>").collect(Collectors.joining(", ")))
                 .add("<b>Статус:</b> " + getStatus(book))
                 .add("<b>Размер:</b> " + new DecimalFormat("#,##0").format(book.getSize()) + " слов (" + book.getChapters() + " глав)")
                 .add("<b>Последнее обновление:</b> " + new SimpleDateFormat("dd/MM/yyyy").format(book.getUpdated()))
-                .add("<b>Фендомы: </b>" + book.getCategories().stream().map(Category::getName).collect(Collectors.joining(", ")))
                 .add("<b>Описание:</b> " + book.getDescription());
         if (book.getCommentary().length() > 0)
             joiner.add("<b>Коментарий:</b> " + book.getCommentary());

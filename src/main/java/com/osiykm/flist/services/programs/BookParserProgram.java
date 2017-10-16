@@ -10,14 +10,15 @@ import com.osiykm.flist.repositories.BookRepository;
 import com.osiykm.flist.repositories.TaskRepository;
 import com.osiykm.flist.services.CategoryService;
 import com.osiykm.flist.services.parser.FanfictionUrlParserService;
+import com.osiykm.flist.services.parser.SBUrlParserService;
+import com.osiykm.flist.services.parser.SVUrlParserService;
+import com.osiykm.flist.services.parser.UrlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /***
  * @author osiykm
@@ -27,23 +28,32 @@ import java.util.Set;
 @Slf4j
 public class BookParserProgram extends BaseProgram {
 
-    private final FanfictionUrlParserService urlParserService;
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
     private final AuthorRepository authorRepository;
     private final TaskRepository taskRepository;
 
+    private Map<String, UrlParser> parsers = new HashMap<>();
     @Autowired
-    public BookParserProgram(FanfictionUrlParserService urlParserService, BookRepository bookRepository, CategoryService categoryService, AuthorRepository authorRepository, TaskRepository taskRepository) {
-        this.urlParserService = urlParserService;
+    public BookParserProgram(FanfictionUrlParserService fanfictionUrlParserService,
+                             BookRepository bookRepository,
+                             CategoryService categoryService,
+                             AuthorRepository authorRepository,
+                             TaskRepository taskRepository,
+                             SBUrlParserService sbUrlParserService,
+                             SVUrlParserService svUrlParserService) {
         this.bookRepository = bookRepository;
         this.categoryService = categoryService;
         this.authorRepository = authorRepository;
         this.taskRepository = taskRepository;
+        parsers.put("fanfiction", fanfictionUrlParserService);
+        parsers.put("spacebattles", sbUrlParserService);
+        parsers.put("sufficientvelocity", svUrlParserService);
     }
 
     @Override
     public void run() {
+        UrlParser urlParser;
         log.info("Start Parser");
         List<Task> tasks = taskRepository.findByStatus(TaskStatus.WAITING);
         for (Task task :
@@ -51,13 +61,15 @@ public class BookParserProgram extends BaseProgram {
             if (isAlive()) {
                 try {
                     log.info(task.getUrl() + " start");
+                    urlParser = parsers.get(getSite(task.getUrl()));
                     save(
-                            urlParserService.getBook(task.getUrl()),
-                            urlParserService.getAuthor(task.getUrl()),
-                            urlParserService.getCategories(task.getUrl())
+                            urlParser.getBook(task.getUrl()),
+                            urlParser.getAuthor(task.getUrl()),
+                            urlParser.getCategories(task.getUrl())
                     );
                     taskRepository.save(task.setStatus(TaskStatus.COMPLETED));
                     log.info(task.getUrl() + " save");
+                    urlParser.unlock();
                 } catch (Exception e) {
                     log.info("task " + task.toString() + " error ", e);
                     taskRepository.save(task.setStatus(TaskStatus.ERROR));
@@ -68,7 +80,10 @@ public class BookParserProgram extends BaseProgram {
         }
         log.info("Stop parser");
         stop();
-        urlParserService.unlock();
+    }
+
+    private String getSite(String url) {
+        return url.split("/")[2].split("\\.")[1];
     }
 
     @Transactional

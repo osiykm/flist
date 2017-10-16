@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 
 /***
  * @author osiykm
- * created 16.10.2017 13:45
+ * created 16.10.2017 21:47
  */
 @Slf4j
 @Service
-public class SBUrlParserService extends UrlParser {
+public class SVUrlParserService extends UrlParser{
     private final static SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
 
     @Autowired
-    public SBUrlParserService(WebDriverComponent webDriverComponent) {
+    public SVUrlParserService(WebDriverComponent webDriverComponent) {
         super(webDriverComponent);
     }
 
@@ -35,11 +35,11 @@ public class SBUrlParserService extends UrlParser {
         return Book.builder()
                 .name(parseName(url))
                 .url(url)
-                .description("")
                 .created(parseCreated(url))
-                .updated(parseUpdated(url))
                 .chapters(parseChapters(url))
+                .updated(parseUpdated(url))
                 .size(parseSize(url))
+                .description("")
                 .build();
     }
 
@@ -56,19 +56,17 @@ public class SBUrlParserService extends UrlParser {
         return new HashSet<>();
     }
 
-    private String parseName(String url) {
-        load(url);
-        return driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div[3]/h1")).getAttribute("innerText");
-    }
-
-    private Date parseCreated(String url) {
-        load(url + "/threadmarks");
-        String date = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div[4]/div[2]/ol/li[1]/div/span")).getAttribute("innerText");
-        try {
-            return format.parse(date);
-        } catch (ParseException e) {
-            return null;
+    private Integer parseSize(String url) {
+        Set<String> urls = parseThreads();
+        int size = 0;
+        for (String p : urls) {
+            load(p);
+            size += parseNumber(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/div[1]/div/span[2]"))
+                    .getAttribute("innerText")
+                    .split(",")[1]
+                    .replace(" Word Count: ", ""));
         }
+        return size;
     }
 
     private Date parseUpdated(String url) {
@@ -80,7 +78,7 @@ public class SBUrlParserService extends UrlParser {
             load(thread_url);
             try {
                 dates.add(
-                        driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div[4]/div[2]/ol/li[*]/div/abbr"))
+                        driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/div[2]/ol/li[*]/div/abbr"))
                                 .stream()
                                 .mapToLong(p -> Long.parseLong(p.getAttribute("data-time")) * 1000L)
                                 .max()
@@ -88,7 +86,7 @@ public class SBUrlParserService extends UrlParser {
                 );
             } catch (Exception e) {
                 dates.add(
-                        driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div[4]/div[2]/ol/li[*]/div/span"))
+                        driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/div[2]/ol/li[*]/div/span"))
                                 .stream().mapToLong(p -> parse(p.getAttribute("innerText")).getTime()).max().orElse(0)
 
                 );
@@ -98,21 +96,12 @@ public class SBUrlParserService extends UrlParser {
         return new Date(dates.stream().mapToLong(p -> p).max().orElse(0));
     }
 
-    private Set<String> parseThreads() {
-        Set<String> urls = driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div[4]/ol/li[*]/h4/a"))
-                .stream()
-                .map(p -> p.getAttribute("href"))
-                .collect(Collectors.toSet());
-        log.info(String.valueOf(urls));
-        return urls;
-    }
-
     private Integer parseChapters(String url) {
         Set<String> urls = parseThreads();
         int chapters = 0;
         for (String p : urls) {
             load(p);
-            chapters += driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div[4]/div[2]/ol/li"))
+            chapters += driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/div[2]/ol/li"))
                     .size();
 
             log.info("CURRENT CHAPTERS: " + chapters);
@@ -120,18 +109,19 @@ public class SBUrlParserService extends UrlParser {
         return chapters;
     }
 
-
-    private Integer parseSize(String url) {
-        Set<String> urls = parseThreads();
-        int size = 0;
-        for (String p : urls) {
-            load(p);
-            size += parseNumber(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div[4]/div[1]/div/span[2]"))
-                    .getAttribute("innerText")
-                    .split(",")[1]
-                    .replace(" Word Count: ", ""));
+    private Date parseCreated(String url) {
+        load(url + "/threadmarks");
+        String date = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/div[2]/ol/li[1]/div/span")).getAttribute("innerText");
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            return null;
         }
-        return size;
+    }
+
+    private String parseName(String url) {
+        load(url);
+        return driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[2]/h1")).getAttribute("innerText");
     }
 
 
@@ -145,5 +135,14 @@ public class SBUrlParserService extends UrlParser {
         } catch (ParseException e) {
             return new Date(0);
         }
+    }
+
+    private Set<String> parseThreads() {
+        Set<String> urls = driver.findElements(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]/div[3]/ol/li[*]/h4/a"))
+                .stream()
+                .map(p -> p.getAttribute("href"))
+                .collect(Collectors.toSet());
+        log.info(String.valueOf(urls));
+        return urls;
     }
 }
