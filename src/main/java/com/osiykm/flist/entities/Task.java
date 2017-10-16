@@ -1,7 +1,8 @@
 package com.osiykm.flist.entities;
 
 import com.osiykm.flist.enums.TaskStatus;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;

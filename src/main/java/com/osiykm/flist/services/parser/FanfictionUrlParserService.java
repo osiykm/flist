@@ -1,9 +1,11 @@
-package com.osiykm.flist.services;
+package com.osiykm.flist.services.parser;
 
 import com.osiykm.flist.entities.Author;
 import com.osiykm.flist.entities.Book;
 import com.osiykm.flist.entities.Category;
 import com.osiykm.flist.enums.BookStatus;
+import com.osiykm.flist.services.CategoryService;
+import com.osiykm.flist.services.WebDriverComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class UrlParserService {
+public class FanfictionUrlParserService implements UrlParser {
     private WebDriver driver;
     private String cacheUrl = "";
     private long timer = Calendar.getInstance().getTimeInMillis();
@@ -28,11 +30,12 @@ public class UrlParserService {
     private final WebDriverComponent webDriverComponent;
 
     @Autowired
-    public UrlParserService(WebDriverComponent webDriverComponent, CategoryService categoryService) {
+    public FanfictionUrlParserService(WebDriverComponent webDriverComponent, CategoryService categoryService) {
         this.categoryService = categoryService;
         this.webDriverComponent = webDriverComponent;
     }
 
+    @Override
     public Book getBook(String url) {
         load(url);
         WebElement description;
@@ -65,6 +68,7 @@ public class UrlParserService {
                 .build();
     }
 
+    @Override
     public Author getAuthor(String url) {
         load(url);
         return Author.builder()
@@ -73,6 +77,7 @@ public class UrlParserService {
                 .build();
     }
 
+    @Override
     public Set<Category> getCategories(String url) {
         load(url);
         List<WebElement> elements = driver.findElements(By.xpath("//*[@id=\"pre_story_links\"]/span/a"));
@@ -99,7 +104,7 @@ public class UrlParserService {
         if (driver == null)
             driver = webDriverComponent.getDriver();
         if (!this.cacheUrl.equals(url)) {
-            if(Calendar.getInstance().getTimeInMillis() - timer < 500)
+            if (Calendar.getInstance().getTimeInMillis() - timer < 500)
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -109,6 +114,7 @@ public class UrlParserService {
         }
     }
 
+    @Override
     public void unlock() {
         webDriverComponent.unlock();
         driver = null;

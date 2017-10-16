@@ -23,6 +23,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
         this.bookRepository = bookRepository;
     }
+
     @Transactional
     public Category parseCategory(String name) {
         if (categoryRepository.existsByCode(genCode(name)))
@@ -31,7 +32,7 @@ public class CategoryService {
         return categoryRepository.save(Category.builder().name(name).code(genCode(name)).build());
     }
 
-    String genCode(String name) {
+    public String genCode(String name) {
         return Optional.ofNullable(name).orElseThrow(NullPointerException::new)
                 .toLowerCase()
                 .replaceAll("[^a-z _+./-]+", "")
@@ -48,9 +49,11 @@ public class CategoryService {
                         categoryRepository.findByCode(p.getCode())).orElseGet(() -> saveOne(p)))
                 .collect(Collectors.toSet());
     }
+
     private Category saveOne(Category category) {
         return categoryRepository.save(category);
     }
+
     @Transactional
     public void deleteByCode(String code) {
         Category category = categoryRepository.findByCode(code);

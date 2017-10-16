@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /***
@@ -51,8 +54,8 @@ public class ListCreatorService {
                 .add("<b>Последнее обновление:</b> " + new SimpleDateFormat("dd/MM/yyyy").format(book.getUpdated()))
                 .add("<b>Фендомы: </b>" + book.getCategories().stream().map(Category::getName).collect(Collectors.joining(", ")))
                 .add("<b>Описание:</b> " + book.getDescription());
-        if(book.getCommentary().length()>0)
-                joiner.add("<b>Коментарий:</b> " + book.getCommentary());
+        if (book.getCommentary().length() > 0)
+            joiner.add("<b>Коментарий:</b> " + book.getCommentary());
         return joiner.toString();
     }
 

@@ -9,7 +9,7 @@ import com.osiykm.flist.repositories.AuthorRepository;
 import com.osiykm.flist.repositories.BookRepository;
 import com.osiykm.flist.repositories.TaskRepository;
 import com.osiykm.flist.services.CategoryService;
-import com.osiykm.flist.services.UrlParserService;
+import com.osiykm.flist.services.parser.FanfictionUrlParserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,14 +27,14 @@ import java.util.Set;
 @Slf4j
 public class BookParserProgram extends BaseProgram {
 
-    private final UrlParserService urlParserService;
+    private final FanfictionUrlParserService urlParserService;
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
     private final AuthorRepository authorRepository;
     private final TaskRepository taskRepository;
 
     @Autowired
-    public BookParserProgram(UrlParserService urlParserService, BookRepository bookRepository, CategoryService categoryService, AuthorRepository authorRepository, TaskRepository taskRepository) {
+    public BookParserProgram(FanfictionUrlParserService urlParserService, BookRepository bookRepository, CategoryService categoryService, AuthorRepository authorRepository, TaskRepository taskRepository) {
         this.urlParserService = urlParserService;
         this.bookRepository = bookRepository;
         this.categoryService = categoryService;
@@ -76,11 +76,12 @@ public class BookParserProgram extends BaseProgram {
         log.info("START save book " + book.toString());
         log.info("author " + author);
         log.info("categories " + categories);
+        Author newAuthor = authorRepository.findByUrl(author.getUrl());
         bookRepository.save(
                 book
                         .setAuthor(
-                                Optional.ofNullable(authorRepository.findByName(author.getName()))
-                                        .orElse(authorRepository.save(author)))
+                                Optional.ofNullable(newAuthor)
+                                        .orElseGet(() -> authorRepository.save(author)))
                         .setCategories(categoryService.save(categories))
         );
     }

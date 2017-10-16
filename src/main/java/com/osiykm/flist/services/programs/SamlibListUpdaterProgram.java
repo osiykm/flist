@@ -15,7 +15,7 @@ import java.util.Calendar;
  */
 @Component
 @Slf4j
-public class SamlibListUpdaterProgram extends BaseProgram{
+public class SamlibListUpdaterProgram extends BaseProgram {
     private final ListCreatorService listCreatorService;
     private final SamlibUpdaterService samlibUpdaterService;
 

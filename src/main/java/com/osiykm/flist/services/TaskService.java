@@ -28,7 +28,8 @@ public class TaskService {
                 tasks) {
             try {
                 response.add(taskRepository.save(task));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return response;
     }

@@ -1,5 +1,6 @@
 package com.osiykm.flist.services;
 
+import com.osiykm.flist.services.parser.FanfictionUrlParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProgramsService {
 
-    private final UrlParserService urlParserService;
+    private final FanfictionUrlParserService urlParserService;
 
     @Autowired
-    public ProgramsService(UrlParserService urlParserService) {
+    public ProgramsService(FanfictionUrlParserService urlParserService) {
         this.urlParserService = urlParserService;
     }
 

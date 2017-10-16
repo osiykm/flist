@@ -17,20 +17,20 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 @Component
 @Slf4j
-public class WebDriverComponent{
+public class WebDriverComponent {
     private WebDriver driver;
     private Lock lock;
+
     public WebDriverComponent() {
         lock = new ReentrantLock();
     }
 
 
-
-    void unlock() {
+    public void unlock() {
         lock.unlock();
     }
 
-    WebDriver getDriver() {
+    public WebDriver getDriver() {
         if (driver == null) {
             try {
                 this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.phantomjs());

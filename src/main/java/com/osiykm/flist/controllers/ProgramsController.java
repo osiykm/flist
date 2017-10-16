@@ -18,6 +18,8 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /***
  * @author osiykm
@@ -40,7 +42,8 @@ public class ProgramsController {
 
     @RequestMapping(value = "/{code}", method = RequestMethod.POST)
     @ResponseBody
-    private ResponseEntity<Void> programRunner(@RequestBody ProgramsRequest request, @PathVariable String code) {
+    private ResponseEntity<Void> programRunner(@RequestBody ProgramsRequest request, @PathVariable("code") String code) {
+        log.info(code);
         BaseProgram program = programs.get(code);
         if (program == null)
             return ResponseEntity.notFound().build();
@@ -59,7 +62,17 @@ public class ProgramsController {
         BaseProgram program = programs.get(code);
         if (program == null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(new ProgramStatusResponse(program.isAlive() ? ProgramStatus.RUNNING : ProgramStatus.STOPPED));
+        return ResponseEntity.ok(new ProgramStatusResponse(code, program.isAlive() ? ProgramStatus.RUNNING : ProgramStatus.STOPPED));
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    private ResponseEntity<Set<ProgramStatusResponse>> get() {
+        return ResponseEntity.ok(
+                programs.entrySet()
+                        .stream()
+                        .map((k) -> new ProgramStatusResponse(k.getKey(), k.getValue().isAlive() ? ProgramStatus.RUNNING : ProgramStatus.STOPPED))
+                        .collect(Collectors.toSet())
+        );
     }
 }
 
@@ -86,5 +99,6 @@ enum ProgramStatus {
 @AllArgsConstructor
 @JsonIgnoreProperties
 class ProgramStatusResponse {
+    private String code;
     private ProgramStatus status;
 }

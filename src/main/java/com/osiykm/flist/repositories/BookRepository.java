@@ -1,26 +1,24 @@
 package com.osiykm.flist.repositories;
 
 import com.osiykm.flist.entities.Book;
-import com.osiykm.flist.entities.BookProj;
 import com.osiykm.flist.enums.BookStatus;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(excerptProjection = BookProj.class)
+
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
-    @RestResource(exported=false)
+    @RestResource(exported = false)
     Book findByUrl(String url);
 
-    @RestResource(exported=false)
+    @RestResource(exported = false)
     Boolean existsByUrl(String url);
 
 
-    @RestResource(exported=false)
+    @RestResource(exported = false)
     List<Book> findByStatusNot(BookStatus status);
 
     @RestResource(rel = "status", path = "status")
